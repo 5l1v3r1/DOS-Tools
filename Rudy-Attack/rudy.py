@@ -48,11 +48,12 @@ def attack(targett,port,header):
             sock = socket.socket()
             try:
                 if 'http://' in targett:
-                    targett.replace('http://','')
+                    targett = targett.replace('http://', '')
                 elif 'https://' in targett:
-                    targett.replace('https://','')
+                    targett = targett.replace('https://','')
                 else:
                     pass
+                break
                 sock.connect((targett,port))
                 if sock:
                     print 'connected\n'
