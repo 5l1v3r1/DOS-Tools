@@ -8,7 +8,7 @@
 
 ## UDP-Flood
 
-### Is an attack based on sending thousands of bytes through the UDP(User Datagram Protocol) packet
+### Is an attack based on sending thousands of bytes without stopping through the UDP(User Datagram Protocol) packet
 
 ## TCP-Flood
 
