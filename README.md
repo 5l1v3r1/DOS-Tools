@@ -10,6 +10,6 @@
 
 ### Is an attack based on sending thousands of bytes without stopping through the UDP(User Datagram Protocol) packet
 
-## TCP-Flood
+## SYN-Flood
 
 ### Is an attack based on flood TCP(Transmission Control Protocol) packets with the SYN flag.
