@@ -12,4 +12,4 @@
 
 ## TCP-Flood
 
-### Is an attack based on connecting to the target through the TCP(Transmission Control Protocol) packet and send thousands of bytes without stopping
+### Is an attack based on flood TCP(Transmission Control Protocol) packets with the SYN flag.
