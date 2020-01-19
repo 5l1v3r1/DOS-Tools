@@ -13,3 +13,13 @@
 ## SYN-Flood
 
 ### Is an attack based on flood TCP(Transmission Control Protocol) packets with the SYN flag.
+
+# Usage
+
+### Before all, install the requirements with the command:
+``` pip install -r requirements.txt ``` 
+
+### To start any attack type the command:
+``` python AnyTool.py -t TARGET_IP -p PORT ```
+
+# This tool has created only for educational purposes.
